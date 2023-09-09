@@ -16,10 +16,8 @@ jobs:
     steps:
 
     - name: Set short git commit SHA
-      id: vars
-      run: |
-        calculatedSha=$(git rev-parse --short ${{ github.sha }})
-        echo "::set-output name=short_sha::$calculatedSha"
+      id: commit
+      uses: prompt/actions-commit-hash@v2
 
     - name: Check out code
       uses: actions/checkout@v2
@@ -39,7 +37,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: flask-app
-        IMAGE_TAG: ${{ steps.vars.outputs.short_sha }}
+        IMAGE_TAG: ${{ steps.commit.outputs.short }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
