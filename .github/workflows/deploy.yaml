@@ -41,3 +41,15 @@ jobs:
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f docker/Dockerfile .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name Kubernetes-demo --region us-east-1
+
+    - name: Deploy to EKS
+      env:
+        IMAGE_TAG: ${{ steps.commit.outputs.short }}
+      run: |
+        sed -i.bak "s|IMAGE_TAG|${IMAGE_TAG}|g" manifests/hello-app-deployment.yaml && \
+        cat manifests/hello-app-deployment.yaml
+        kubectl apply -f manifests/hello-app-deployment.yaml
+        kubectl apply -f manifests/hello-app-service.yaml
