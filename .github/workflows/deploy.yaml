@@ -50,6 +50,5 @@ jobs:
         IMAGE_TAG: ${{ steps.commit.outputs.short }}
       run: |
         sed -i.bak "s|IMAGE_TAG|${IMAGE_TAG}|g" manifests/hello-app-deployment.yaml && \
-        cat manifests/hello-app-deployment.yaml
         kubectl apply -f manifests/hello-app-deployment.yaml
         kubectl apply -f manifests/hello-app-service.yaml
