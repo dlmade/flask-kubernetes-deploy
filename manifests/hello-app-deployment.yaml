@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: hello-app
-        image: 748607688189.dkr.ecr.us-east-1.amazonaws.com/flask-app:IMAGE_TAG
+        image: DOCKER_IMAGE
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
